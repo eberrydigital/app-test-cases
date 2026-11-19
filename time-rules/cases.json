@@ -1,0 +1,2925 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "status_open_now_closes_at",
+      "rule": "Badge: open now with a closing time",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "closesAt",
+          "time": "23:00"
+        }
+      }
+    },
+    {
+      "id": "status_before_opening_opens_today",
+      "rule": "Badge: closed, next opening today",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T08:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "opensAt",
+          "from": "2026-11-18T11:30"
+        }
+      }
+    },
+    {
+      "id": "status_after_closing_opens_tomorrow",
+      "rule": "Badge: closed, next opening tomorrow",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T22:30:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "opensAt",
+          "from": "2026-11-19T11:30"
+        }
+      }
+    },
+    {
+      "id": "status_closed_day_is_skipped",
+      "rule": "A closed day is skipped when looking for the next opening",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-21T22:30:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "opensAt",
+          "from": "2026-11-23T11:30"
+        }
+      }
+    },
+    {
+      "id": "status_period_marked_all_day",
+      "rule": "allDay is open all day",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "00:00",
+                  "closing": null,
+                  "allDay": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "openAllDay"
+        }
+      }
+    },
+    {
+      "id": "status_same_opening_and_closing_time_is_all_day",
+      "rule": "D16: the same opening and closing time is open all day",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "10:00",
+                  "closing": "10:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "openAllDay"
+        }
+      }
+    },
+    {
+      "id": "status_no_closing_time_is_closing_late",
+      "rule": "No closing time: closes late",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T19:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "17:00",
+                  "closing": null,
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "closingLate"
+        }
+      }
+    },
+    {
+      "id": "status_late_period_from_yesterday_is_open_at_03",
+      "rule": "Closing late counts as open until 05:00 the next day, also from yesterday",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-19T02:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "17:00",
+                  "closing": null,
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "closingLate"
+        }
+      }
+    },
+    {
+      "id": "status_late_period_has_ended_after_05",
+      "rule": "Closing late ends at 05:00 the next day",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-19T05:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "17:00",
+                  "closing": null,
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "opensAt",
+          "from": "2026-11-19T17:00"
+        }
+      }
+    },
+    {
+      "id": "status_closing_before_opening_is_next_day",
+      "rule": "A closing time earlier than the opening time is on the next day",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T23:30:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "22:00",
+                  "closing": "01:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "closesAt",
+          "time": "01:00"
+        }
+      }
+    },
+    {
+      "id": "status_two_periods_between_them",
+      "rule": "Several periods: the next one today",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T14:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "14:00",
+                  "allDay": false
+                },
+                {
+                  "opening": "17:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "opensAt",
+          "from": "2026-11-18T17:00"
+        }
+      }
+    },
+    {
+      "id": "status_two_periods_in_the_first",
+      "rule": "Several periods: open in the first",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T11:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "14:00",
+                  "allDay": false
+                },
+                {
+                  "opening": "17:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "closesAt",
+          "time": "14:00"
+        }
+      }
+    },
+    {
+      "id": "status_exception_today_replaces_regular_hours",
+      "rule": "An exception on today's date replaces the regular hours",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-18",
+          "validTo": "2026-11-18",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "10:00",
+                  "closing": "14:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "closesAt",
+          "time": "14:00"
+        }
+      }
+    },
+    {
+      "id": "status_exception_today_has_ended",
+      "rule": "An exception today replaces regular hours also after it has ended",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T14:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-18",
+          "validTo": "2026-11-18",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "10:00",
+                  "closing": "14:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "opensAt",
+          "from": "2026-11-19T11:30"
+        }
+      }
+    },
+    {
+      "id": "status_closed_exception_today",
+      "rule": "A closed exception today makes today closed",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-18",
+          "validTo": "2026-11-18",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "opensAt",
+          "from": "2026-11-19T11:30"
+        }
+      }
+    },
+    {
+      "id": "status_exception_tomorrow_has_other_hours",
+      "rule": "The next opening follows tomorrow's exception",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T22:30:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-19",
+          "validTo": "2026-11-19",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "15:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "opensAt",
+          "from": "2026-11-19T12:00"
+        }
+      }
+    },
+    {
+      "id": "status_next_opening_in_a_later_schedule",
+      "rule": "The next opening can be in a later schedule",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-11-25",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "opensAt",
+          "from": "2026-11-25T11:30"
+        }
+      }
+    },
+    {
+      "id": "status_opening_exactly_14_days_ahead",
+      "rule": "The 14th day ahead counts",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-12-02",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "opensAt",
+          "from": "2026-12-02T11:30"
+        }
+      }
+    },
+    {
+      "id": "status_nothing_within_14_days",
+      "rule": "No opening within 14 days gives no badge",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-12-03",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "status": {
+          "kind": "none"
+        }
+      }
+    },
+    {
+      "id": "status_no_schedule_at_all",
+      "rule": "No schedule gives no badge",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [],
+      "expected": {
+        "status": {
+          "kind": "none"
+        }
+      }
+    },
+    {
+      "id": "status_hotel_ahead_of_the_phone_zone",
+      "rule": "D15: the hotel's time zone decides, here UTC+14",
+      "timeZone": "Pacific/Kiritimati",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "hotelNow": "2026-11-19T02:00",
+        "status": {
+          "kind": "opensAt",
+          "from": "2026-11-19T11:30"
+        }
+      }
+    },
+    {
+      "id": "status_hotel_behind_the_phone_zone",
+      "rule": "D15: the hotel's time zone decides, here UTC-11",
+      "timeZone": "Pacific/Pago_Pago",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "hotelNow": "2026-11-18T01:00",
+        "status": {
+          "kind": "opensAt",
+          "from": "2026-11-18T11:30"
+        }
+      }
+    },
+    {
+      "id": "rows_weekdays_saturday_and_closed_sunday",
+      "rule": "Rows: days as runs, today's row, a closed row",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "17:00",
+                  "closing": "01:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "FRIDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "11:30",
+                "closing": "23:00",
+                "allDay": false
+              }
+            ],
+            "today": true
+          },
+          {
+            "runs": [
+              [
+                "SATURDAY",
+                "SATURDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "17:00",
+                "closing": "01:00",
+                "allDay": false
+              }
+            ],
+            "today": false
+          },
+          {
+            "runs": [
+              [
+                "SUNDAY",
+                "SUNDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [],
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "rows_days_not_in_a_row",
+      "rule": "Days that are not in a row are shown apart",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "WEDNESDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "MONDAY"
+              ],
+              [
+                "WEDNESDAY",
+                "WEDNESDAY"
+              ],
+              [
+                "FRIDAY",
+                "FRIDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "11:30",
+                "closing": "23:00",
+                "allDay": false
+              }
+            ],
+            "today": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "rows_run_and_single_day",
+      "rule": "A run and a single day",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "WEDNESDAY"
+              ],
+              [
+                "FRIDAY",
+                "FRIDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "11:30",
+                "closing": "23:00",
+                "allDay": false
+              }
+            ],
+            "today": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "rows_days_in_any_order_are_sorted_monday_first",
+      "rule": "Omni's days need not be in order",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "FRIDAY",
+                "MONDAY",
+                "TUESDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "TUESDAY"
+              ],
+              [
+                "FRIDAY",
+                "FRIDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "11:30",
+                "closing": "23:00",
+                "allDay": false
+              }
+            ],
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "rows_a_row_with_no_days_is_skipped",
+      "rule": "A row with no days is not shown",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "SUNDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "11:30",
+                "closing": "23:00",
+                "allDay": false
+              }
+            ],
+            "today": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "rows_several_periods_in_a_row",
+      "rule": "Several periods stay in one row in order",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "14:00",
+                  "allDay": false
+                },
+                {
+                  "opening": "17:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "SUNDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "11:30",
+                "closing": "14:00",
+                "allDay": false
+              },
+              {
+                "opening": "17:00",
+                "closing": "22:00",
+                "allDay": false
+              }
+            ],
+            "today": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "rows_no_regular_schedule_contains_today",
+      "rule": "If no regular schedule contains today the hours are hidden",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-11-25",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": []
+      }
+    },
+    {
+      "id": "rows_today_is_the_hotels_today",
+      "rule": "Today's row follows the hotel's date, here Thursday",
+      "timeZone": "Pacific/Kiritimati",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:00",
+                  "closing": "12:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "13:00",
+                  "closing": "14:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "WEDNESDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "11:00",
+                "closing": "12:00",
+                "allDay": false
+              }
+            ],
+            "today": false
+          },
+          {
+            "runs": [
+              [
+                "THURSDAY",
+                "SUNDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "13:00",
+                "closing": "14:00",
+                "allDay": false
+              }
+            ],
+            "today": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "rows_star_for_a_weekday_with_an_upcoming_exception",
+      "rule": "The * mark on rows whose weekday has an upcoming exception",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-20",
+          "validTo": "2026-11-20",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "FRIDAY"
+              ]
+            ],
+            "star": true,
+            "periods": [
+              {
+                "opening": "11:30",
+                "closing": "23:00",
+                "allDay": false
+              }
+            ],
+            "today": true
+          },
+          {
+            "runs": [
+              [
+                "SATURDAY",
+                "SUNDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "12:00",
+                "closing": "22:00",
+                "allDay": false
+              }
+            ],
+            "today": false
+          }
+        ],
+        "exceptionRows": [
+          {
+            "date": "2026-11-20",
+            "period": null,
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "rows_exception_starting_on_the_14th_day_is_listed",
+      "rule": "An exception that starts on the 14th day ahead counts",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-12-02",
+          "validTo": "2026-12-02",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "FRIDAY"
+              ]
+            ],
+            "star": true,
+            "periods": [
+              {
+                "opening": "11:30",
+                "closing": "23:00",
+                "allDay": false
+              }
+            ],
+            "today": true
+          },
+          {
+            "runs": [
+              [
+                "SATURDAY",
+                "SUNDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "12:00",
+                "closing": "22:00",
+                "allDay": false
+              }
+            ],
+            "today": false
+          }
+        ],
+        "exceptionRows": [
+          {
+            "date": "2026-12-02",
+            "period": null,
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "rows_exception_starting_on_the_15th_day_is_not_listed",
+      "rule": "An exception that starts later than 14 days ahead does not count",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-12-03",
+          "validTo": "2026-12-03",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "FRIDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "11:30",
+                "closing": "23:00",
+                "allDay": false
+              }
+            ],
+            "today": true
+          },
+          {
+            "runs": [
+              [
+                "SATURDAY",
+                "SUNDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "12:00",
+                "closing": "22:00",
+                "allDay": false
+              }
+            ],
+            "today": false
+          }
+        ],
+        "exceptionRows": []
+      }
+    },
+    {
+      "id": "rows_exception_that_has_ended_is_not_listed",
+      "rule": "An exception that has ended does not count",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-10",
+          "validTo": "2026-11-17",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "FRIDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "11:30",
+                "closing": "23:00",
+                "allDay": false
+              }
+            ],
+            "today": true
+          },
+          {
+            "runs": [
+              [
+                "SATURDAY",
+                "SUNDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "12:00",
+                "closing": "22:00",
+                "allDay": false
+              }
+            ],
+            "today": false
+          }
+        ],
+        "exceptionRows": []
+      }
+    },
+    {
+      "id": "rows_exception_that_began_earlier_is_listed_from_today",
+      "rule": "An exception that began earlier counts from today",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-16",
+          "validTo": "2026-11-20",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "FRIDAY"
+              ]
+            ],
+            "star": true,
+            "periods": [
+              {
+                "opening": "11:30",
+                "closing": "23:00",
+                "allDay": false
+              }
+            ],
+            "today": true
+          },
+          {
+            "runs": [
+              [
+                "SATURDAY",
+                "SUNDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "12:00",
+                "closing": "22:00",
+                "allDay": false
+              }
+            ],
+            "today": false
+          }
+        ],
+        "exceptionRows": [
+          {
+            "date": "2026-11-18",
+            "period": null,
+            "today": true
+          },
+          {
+            "date": "2026-11-19",
+            "period": null,
+            "today": false
+          },
+          {
+            "date": "2026-11-20",
+            "period": null,
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "rows_exception_with_hours",
+      "rule": "An exception with hours shows those hours",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-20",
+          "validTo": "2026-11-20",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "10:00",
+                  "closing": "14:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "rows": [
+          {
+            "runs": [
+              [
+                "MONDAY",
+                "FRIDAY"
+              ]
+            ],
+            "star": true,
+            "periods": [
+              {
+                "opening": "11:30",
+                "closing": "23:00",
+                "allDay": false
+              }
+            ],
+            "today": true
+          },
+          {
+            "runs": [
+              [
+                "SATURDAY",
+                "SUNDAY"
+              ]
+            ],
+            "star": false,
+            "periods": [
+              {
+                "opening": "12:00",
+                "closing": "22:00",
+                "allDay": false
+              }
+            ],
+            "today": false
+          }
+        ],
+        "exceptionRows": [
+          {
+            "date": "2026-11-20",
+            "period": {
+              "opening": "10:00",
+              "closing": "14:00",
+              "allDay": false
+            },
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "lines_one_date",
+      "rule": "One date is one line with the same first and last date",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-20",
+          "validTo": "2026-11-20",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "exceptionLines": [
+          {
+            "first": "2026-11-20",
+            "last": "2026-11-20",
+            "period": null,
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "lines_closed_dates_in_a_row_are_one_line",
+      "rule": "Dates in a row that are all closed are one line",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-19",
+          "validTo": "2026-11-21",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "exceptionLines": [
+          {
+            "first": "2026-11-19",
+            "last": "2026-11-21",
+            "period": null,
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "lines_same_hours_in_a_row_are_one_line",
+      "rule": "Dates in a row with the same periods are one line",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-19",
+          "validTo": "2026-11-21",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "15:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "exceptionLines": [
+          {
+            "first": "2026-11-19",
+            "last": "2026-11-21",
+            "period": {
+              "opening": "12:00",
+              "closing": "15:00",
+              "allDay": false
+            },
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "lines_same_hours_in_two_exceptions_are_one_line",
+      "rule": "Dates in a row with the same periods are one line, even from two exceptions",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-19",
+          "validTo": "2026-11-19",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "15:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-20",
+          "validTo": "2026-11-21",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "15:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "exceptionLines": [
+          {
+            "first": "2026-11-19",
+            "last": "2026-11-21",
+            "period": {
+              "opening": "12:00",
+              "closing": "15:00",
+              "allDay": false
+            },
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "lines_a_day_between_is_not_bundled",
+      "rule": "Dates with a day between them are separate lines",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-19",
+          "validTo": "2026-11-19",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-21",
+          "validTo": "2026-11-21",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "exceptionLines": [
+          {
+            "first": "2026-11-19",
+            "last": "2026-11-19",
+            "period": null,
+            "today": false
+          },
+          {
+            "first": "2026-11-21",
+            "last": "2026-11-21",
+            "period": null,
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "lines_different_hours_are_separate_lines",
+      "rule": "Dates in a row with different periods are separate lines",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-19",
+          "validTo": "2026-11-19",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-20",
+          "validTo": "2026-11-20",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "15:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "exceptionLines": [
+          {
+            "first": "2026-11-19",
+            "last": "2026-11-19",
+            "period": null,
+            "today": false
+          },
+          {
+            "first": "2026-11-20",
+            "last": "2026-11-20",
+            "period": {
+              "opening": "12:00",
+              "closing": "15:00",
+              "allDay": false
+            },
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "lines_several_periods_are_one_line_each",
+      "rule": "A date with several periods has one line for each period, bundled over the dates",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-19",
+          "validTo": "2026-11-20",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "07:00",
+                  "closing": "10:00",
+                  "allDay": false
+                },
+                {
+                  "opening": "17:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "exceptionLines": [
+          {
+            "first": "2026-11-19",
+            "last": "2026-11-20",
+            "period": {
+              "opening": "07:00",
+              "closing": "10:00",
+              "allDay": false
+            },
+            "today": false
+          },
+          {
+            "first": "2026-11-19",
+            "last": "2026-11-20",
+            "period": {
+              "opening": "17:00",
+              "closing": "22:00",
+              "allDay": false
+            },
+            "today": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "lines_today_in_the_range_marks_the_line",
+      "rule": "A line is today when today is one of its dates",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-17",
+          "validTo": "2026-11-20",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "exceptionLines": [
+          {
+            "first": "2026-11-18",
+            "last": "2026-11-20",
+            "period": null,
+            "today": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "lines_today_with_other_hours_is_its_own_line",
+      "rule": "Today with other hours than the next dates is its own line, marked as today",
+      "timeZone": "Europe/Oslo",
+      "nowUtc": "2026-11-18T12:00:00Z",
+      "schedules": [
+        {
+          "type": "REGULAR",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "11:30",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            },
+            {
+              "days": [
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "22:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-18",
+          "validTo": "2026-11-18",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": [
+                {
+                  "opening": "12:00",
+                  "closing": "23:00",
+                  "allDay": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "EXCEPTION",
+          "validFrom": "2026-11-19",
+          "validTo": "2026-11-20",
+          "rows": [
+            {
+              "days": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "periods": []
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "exceptionLines": [
+          {
+            "first": "2026-11-18",
+            "last": "2026-11-18",
+            "period": {
+              "opening": "12:00",
+              "closing": "23:00",
+              "allDay": false
+            },
+            "today": true
+          },
+          {
+            "first": "2026-11-19",
+            "last": "2026-11-20",
+            "period": null,
+            "today": false
+          }
+        ]
+      }
+    }
+  ]
+}
