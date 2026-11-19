@@ -29,5 +29,10 @@ submodule, so a change here reaches an app when the app moves its submodule to t
   and `today` marks today's row. No rows means the hours are hidden.
 - `exceptionRows`: the upcoming exceptions, one line for each period that has not ended. A
   `period` of `null` means closed.
+- `exceptionLines`: the exception lines the screen shows (spec `facilities-in-bff`, "Exception
+  lines"). Dates in a row with the same periods, or all closed, are one line with a `first` and
+  a `last` date (one date has the same `first` and `last`); a date with several periods has one
+  line for each period. `period` is `null` for closed, and `today` is true when today is one of
+  the line's dates.
 
 The dates are in November 2026: 2026-11-18 is a Wednesday, and Oslo is UTC+1.
